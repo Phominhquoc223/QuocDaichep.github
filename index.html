@@ -1,0 +1,753 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sakura Study - CNTT 4.0</title>
+
+<style>
+:root {
+ --bg:#f6f1fa;
+ --card:#fff;
+ --text:#30263c;
+ --muted:#81768d;
+ --accent:#9874bd;
+ --pink:#e6a2bd;
+ --line:#e9dfef;
+}
+body.dark {
+ --bg:#171522;
+ --card:#252133;
+ --text:#f5efff;
+ --muted:#bdb2cc;
+ --accent:#bd9ce6;
+ --line:#40374c;
+}
+* {box-sizing:border-box}
+body {
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+ transition:.3s;
+}
+button {cursor:pointer;font:inherit}
+
+/* MÀN HÌNH HOÀNG HÔN */
+#intro {
+ height:100vh;
+ position:relative;
+ overflow:hidden;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ text-align:center;
+ color:white;
+ background:linear-gradient(
+ 180deg,#27294d,#685078,#d47f8d,#f7b27d
+ );
+}
+.sun {
+ position:absolute;
+ width:280px;
+ height:280px;
+ border-radius:50%;
+ background:#ffe3a9;
+ box-shadow:0 0 100px #ffc58d;
+ top:16%;
+ right:15%;
+}
+.mountain {
+ position:absolute;
+ bottom:0;
+ width:100%;
+ height:25%;
+ background:#403047;
+ clip-path:polygon(0 40%,20% 10%,40% 45%,65% 5%,100% 35%,100% 100%,0 100%);
+}
+.tree {
+ position:absolute;
+ bottom:6%;
+ left:7%;
+ font-size:180px;
+ z-index:2;
+ filter:drop-shadow(5px 5px 8px #34213b);
+}
+.intro-content {
+ z-index:4;
+ padding:20px;
+}
+.intro-content h1 {
+ font-family:Georgia,serif;
+ font-size:clamp(40px,7vw,75px);
+ font-weight:normal;
+}
+.intro-content p {
+ line-height:1.8;
+ max-width:550px;
+}
+.enter {
+ padding:15px 30px;
+ border:1px solid white;
+ border-radius:30px;
+ background:#ffffff25;
+ color:white;
+ font-weight:bold;
+ transition:.3s;
+}
+.enter:hover {
+ background:white;
+ color:#765477;
+ transform:translateY(-4px);
+}
+.petals {
+ position:absolute;
+ inset:0;
+ overflow:hidden;
+ pointer-events:none;
+ z-index:3;
+}
+.petal {
+ position:absolute;
+ top:-30px;
+ width:13px;
+ height:17px;
+ background:#ffd6e7;
+ border-radius:80% 10% 80% 10%;
+ animation:fall linear infinite;
+}
+@keyframes fall {
+ to {transform:translate(100px,110vh) rotate(700deg)}
+}
+
+/* WEBSITE CHÍNH */
+#app {display:none}
+header {
+ position:sticky;
+ top:0;
+ z-index:10;
+ background:var(--card);
+ border-bottom:1px solid var(--line);
+ padding:15px 5%;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+.logo {font-weight:bold;font-size:20px;color:var(--accent)}
+.header-actions {display:flex;gap:10px}
+.btn {
+ padding:10px 15px;
+ border:1px solid var(--line);
+ border-radius:10px;
+ background:var(--card);
+ color:var(--text);
+}
+.layout {
+ display:grid;
+ grid-template-columns:240px 1fr;
+ gap:25px;
+ max-width:1400px;
+ margin:auto;
+ padding:25px;
+}
+.sidebar {
+ background:var(--card);
+ border:1px solid var(--line);
+ border-radius:18px;
+ padding:15px;
+ height:max-content;
+ position:sticky;
+ top:85px;
+}
+.nav {
+ width:100%;
+ display:block;
+ text-align:left;
+ padding:14px;
+ margin:5px 0;
+ border:0;
+ border-radius:10px;
+ background:transparent;
+ color:var(--muted);
+}
+.nav:hover,.nav.active {
+ background:var(--bg);
+ color:var(--accent);
+ font-weight:bold;
+}
+main {min-width:0}
+.page {display:none}
+.page.active {display:block}
+.hero {
+ padding:30px;
+ border-radius:20px;
+ background:linear-gradient(120deg,#8063a5,#c484a2,#e9ad91);
+ color:white;
+ margin-bottom:20px;
+}
+.hero h1 {font-size:32px}
+.hero p {line-height:1.7}
+.cards {
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:15px;
+}
+.card {
+ background:var(--card);
+ border:1px solid var(--line);
+ padding:20px;
+ border-radius:16px;
+ margin-bottom:15px;
+ box-shadow:0 8px 25px #3220440b;
+}
+.card h3 {margin-top:5px}
+.card p {color:var(--muted);line-height:1.7}
+.tag {
+ color:var(--accent);
+ background:var(--bg);
+ padding:6px 10px;
+ border-radius:20px;
+ font-size:12px;
+ font-weight:bold;
+}
+.primary {
+ background:var(--accent);
+ color:white;
+ border:0;
+ padding:11px 16px;
+ border-radius:10px;
+}
+input,textarea,select {
+ background:var(--card);
+ color:var(--text);
+ border:1px solid var(--line);
+ border-radius:9px;
+ padding:11px;
+ width:100%;
+ margin:5px 0;
+}
+textarea {min-height:120px}
+.progress {
+ height:10px;
+ background:var(--bg);
+ border-radius:20px;
+ overflow:hidden;
+}
+.progress div {
+ height:100%;
+ background:linear-gradient(90deg,#9874bd,#e6a2bd);
+ width:0;
+ transition:.3s;
+}
+.checklist {
+ list-style:none;
+ padding:0;
+}
+.checklist li {
+ padding:12px 0;
+ border-bottom:1px solid var(--line);
+}
+.checklist input {
+ width:auto;
+ margin-right:10px;
+}
+.note-grid {
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
+}
+.note {
+ background:var(--card);
+ border:1px solid var(--line);
+ border-radius:14px;
+ padding:16px;
+ overflow-wrap:anywhere;
+}
+.note p {color:var(--muted);white-space:pre-wrap}
+.note button {
+ margin-right:5px;
+ padding:7px;
+ border:1px solid var(--line);
+ background:var(--bg);
+ color:var(--text);
+ border-radius:7px;
+}
+.footer {
+ text-align:center;
+ color:var(--muted);
+ padding:30px;
+}
+@media(max-width:850px) {
+ .layout {grid-template-columns:1fr}
+ .sidebar {
+  position:static;
+  display:flex;
+  overflow-x:auto;
+ }
+ .nav {min-width:max-content;width:auto}
+ .cards {grid-template-columns:1fr}
+}
+@media(max-width:550px) {
+ .note-grid {grid-template-columns:1fr}
+ .tree {left:-35px;font-size:130px}
+ .layout {padding:12px}
+ .hero {padding:20px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- MÀN HÌNH MỞ ĐẦU -->
+<section id="intro">
+ <div class="sun"></div>
+ <div class="mountain"></div>
+ <div class="tree">🌸</div>
+ <div class="petals" id="petals"></div>
+
+ <div class="intro-content">
+  <p>FPT POLYTECHNIC · CNTT 4.0</p>
+  <h1>Sakura Study</h1>
+  <p>
+   Chào mừng bạn đến với không gian học tập cá nhân.
+   Hãy bắt đầu hành trình khám phá tri thức
+   dưới ánh hoàng hôn và những cánh hoa anh đào.
+  </p>
+  <button class="enter" onclick="enterApp()">
+   BẮT ĐẦU HỌC TẬP →
+  </button>
+ </div>
+</section>
+
+<!-- WEBSITE -->
+<div id="app">
+
+<header>
+ <div class="logo">🌸 SAKURA STUDY</div>
+ <div class="header-actions">
+  <button class="btn" onclick="toggleTheme()">☾ Sáng / Tối</button>
+  <button class="btn" onclick="backHome()">⌂</button>
+ </div>
+</header>
+
+<div class="layout">
+
+<!-- MENU -->
+<aside class="sidebar">
+ <button class="nav active" onclick="showPage('home',this)">⌂ Tổng quan</button>
+ <button class="nav" onclick="showPage('part1',this)">📚 Phần 1 - Thư viện số</button>
+ <button class="nav" onclick="showPage('part2',this)">📝 Phần 2 - Ứng dụng cá nhân</button>
+ <button class="nav" onclick="showPage('notes',this)">✎ Quản lý ghi chú</button>
+ <button class="nav" onclick="showPage('tasks',this)">☑ Tiến độ Assignment</button>
+ <button class="nav" onclick="showPage('submit',this)">⇧ Sản phẩm cần nộp</button>
+</aside>
+
+<main>
+
+<!-- TỔNG QUAN -->
+<section class="page active" id="home">
+ <div class="hero">
+  <h1>Xin chào! 🌸</h1>
+  <p>
+   Chào mừng bạn đến với Sakura Study.
+   Đây là website hỗ trợ thực hiện Assignment môn CNTT 4.0.
+  </p>
+ </div>
+
+ <div class="cards">
+  <div class="card">
+   <span class="tag">PHẦN 1</span>
+   <h3>Trợ lý học tập</h3>
+   <p>Xây dựng thư viện số cá nhân với Google NotebookLM.</p>
+   <button class="primary" onclick="showPage('part1')">Khám phá</button>
+  </div>
+
+  <div class="card">
+   <span class="tag">PHẦN 2</span>
+   <h3>Quản lý ghi chú</h3>
+   <p>Xây dựng ứng dụng quản lý ghi chú cá nhân.</p>
+   <button class="primary" onclick="showPage('part2')">Khám phá</button>
+  </div>
+ </div>
+
+ <div class="cards">
+  <div class="card">
+   <h2>8</h2>
+   <p>Slide bài học cần thu thập</p>
+  </div>
+  <div class="card">
+   <h2>10+</h2>
+   <p>Ghi chú cá nhân cần có</p>
+  </div>
+ </div>
+</section>
+
+<!-- PHẦN 1 -->
+<section class="page" id="part1">
+ <div class="card">
+  <span class="tag">Y1 - Y3</span>
+  <h2>📚 PHẦN 1: TỰ TẠO TRỢ LÝ HỌC TẬP</h2>
+  <p><b>Mục tiêu:</b> Kỹ năng tìm kiếm thông tin, khai thác thông tin và xây dựng thư viện số phục vụ học tập cá nhân.</p>
+  <p><b>Công cụ:</b> Google NotebookLM.</p>
+ </div>
+
+ <div class="card">
+  <h3>Y1 - Thu thập 8 slide bài học</h3>
+  <div id="slides"></div>
+  <div class="progress"><div id="slideProgress"></div></div>
+  <p id="slideText">0/8 hoàn thành</p>
+ </div>
+
+ <div class="card">
+  <h3>Y2 - Nội dung thư viện số cá nhân</h3>
+  <ul class="checklist">
+   <li>📄 Tập tin PDF, Word hoặc văn bản khác.</li>
+   <li>🖼️ Hình ảnh hoặc Video.</li>
+   <li>🔗 Link tham chiếu đến website khác.</li>
+   <li>📝 Ghi chú cá nhân về tài liệu đã thu thập.</li>
+  </ul>
+ </div>
+
+ <div class="card">
+  <h3>Y3 - Yêu cầu mở rộng</h3>
+  <p>Xây dựng các thư viện cá nhân khác cho các môn học khác.</p>
+ </div>
+</section>
+
+<!-- PHẦN 2 -->
+<section class="page" id="part2">
+ <div class="card">
+  <span class="tag">Y4 - Y6</span>
+  <h2>📝 PHẦN 2: XÂY DỰNG ỨNG DỤNG CÁ NHÂN</h2>
+  <p><b>Mục tiêu:</b> Xây dựng ứng dụng Quản lý ghi chú cá nhân.</p>
+  <p><b>Công cụ:</b> Google AI Studio và DrawIO / Figma / Canva / PowerPoint.</p>
+ </div>
+
+ <div class="card">
+  <h3>Y4 - Bản vẽ phác thảo</h3>
+  <ul class="checklist">
+   <li>Giao diện chính.</li>
+   <li>Giao diện các chức năng chính.</li>
+   <li>Cách vận hành các chức năng chính.</li>
+  </ul>
+ </div>
+
+ <div class="card">
+  <h3>Y5 - Nội dung tối thiểu</h3>
+  <ul class="checklist">
+   <li>Ít nhất 10 ghi chú cá nhân có ý nghĩa.</li>
+   <li>Thời gian áp dụng ít nhất 5 ngày.</li>
+  </ul>
+ </div>
+
+ <div class="card">
+  <h3>Y6 - Yêu cầu mở rộng</h3>
+  <p>Ứng dụng trí tuệ nhân tạo (AI) trong quản lý ghi chú.</p>
+ </div>
+</section>
+
+<!-- QUẢN LÝ GHI CHÚ -->
+<section class="page" id="notes">
+ <div class="card">
+  <h2>✎ QUẢN LÝ GHI CHÚ CÁ NHÂN</h2>
+  <p>Tạo, chỉnh sửa, tìm kiếm và xóa ghi chú.</p>
+
+  <input id="title" placeholder="Nhập tiêu đề ghi chú...">
+  <select id="category">
+   <option>Học tập</option>
+   <option>Công việc</option>
+   <option>Ý tưởng</option>
+   <option>Cá nhân</option>
+  </select>
+  <textarea id="content" placeholder="Nhập nội dung ghi chú..."></textarea>
+
+  <button class="primary" onclick="addNote()">＋ Lưu ghi chú</button>
+ </div>
+
+ <div class="card">
+  <input id="search" placeholder="🔍 Tìm kiếm ghi chú..." oninput="renderNotes()">
+  <div class="note-grid" id="noteList"></div>
+ </div>
+</section>
+
+<!-- TIẾN ĐỘ -->
+<section class="page" id="tasks">
+ <div class="card">
+  <h2>☑ TIẾN ĐỘ ASSIGNMENT</h2>
+  <p>Đánh dấu những công việc đã hoàn thành.</p>
+  <div id="taskList"></div>
+  <div class="progress"><div id="taskProgress"></div></div>
+  <p id="taskText"></p>
+ </div>
+
+ <div class="card">
+  <h3>Đánh giá Assignment</h3>
+  <p>Giai đoạn 1: 10%</p>
+  <p>Giai đoạn 2: 10%</p>
+  <p>Bảo vệ Assignment: 40%</p>
+ </div>
+</section>
+
+<!-- SẢN PHẨM -->
+<section class="page" id="submit">
+ <div class="card">
+  <h2>⇧ SẢN PHẨM CẦN NỘP</h2>
+  <h3>Sản phẩm bắt buộc</h3>
+  <ul class="checklist">
+   <li>Báo cáo quá trình thực hiện các yêu cầu.</li>
+   <li>File PDF, Microsoft Word hoặc Google Docs.</li>
+  </ul>
+
+  <h3>Tùy chọn bổ sung</h3>
+  <ul class="checklist">
+   <li>Slide trình bày tóm tắt quá trình và kết quả.</li>
+   <li>Thuyết trình trước lớp.</li>
+  </ul>
+ </div>
+
+ <div class="card">
+  <h3>Quy cách đóng gói</h3>
+  <p>
+   &lt;Mã sinh viên - Tên sinh viên&gt;_Mã Môn_Assignment.zip
+  </p>
+ </div>
+
+ <div class="card">
+  <h3>Tiêu chí đánh giá</h3>
+  <ul class="checklist">
+   <li>Nội dung đầy đủ.</li>
+   <li>Thời gian không vượt quá quy định.</li>
+   <li>Kỹ năng trình bày rõ ràng.</li>
+   <li>Sản phẩm đẹp, sinh động, sáng tạo.</li>
+  </ul>
+ </div>
+</section>
+
+</main>
+</div>
+
+<div class="footer">
+ Sakura Study · CNTT 4.0 · FPT Polytechnic 🌸
+</div>
+</div>
+
+<script>
+
+// CHUYỂN MÀN HÌNH
+function enterApp(){
+ document.getElementById('intro').style.display='none';
+ document.getElementById('app').style.display='block';
+ window.scrollTo(0,0);
+}
+
+function backHome(){
+ document.getElementById('app').style.display='none';
+ document.getElementById('intro').style.display='flex';
+ window.scrollTo(0,0);
+}
+
+// CHUYỂN TRANG
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+
+ document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
+ if(btn) btn.classList.add('active');
+
+ if(id==='notes') renderNotes();
+ window.scrollTo(0,0);
+}
+
+// SÁNG TỐI
+function toggleTheme(){
+ document.body.classList.toggle('dark');
+ localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');
+}
+if(localStorage.getItem('theme')==='dark'){
+ document.body.classList.add('dark');
+}
+
+// HOA ANH ĐÀO RƠI
+for(let i=0;i<35;i++){
+ let p=document.createElement('div');
+ p.className='petal';
+ p.style.left=Math.random()*100+'%';
+ p.style.animationDuration=(6+Math.random()*10)+'s';
+ p.style.animationDelay=(-Math.random()*15)+'s';
+ document.getElementById('petals').appendChild(p);
+}
+
+// 8 SLIDE
+let slides=JSON.parse(localStorage.getItem('slides')||'[]');
+
+function renderSlides(){
+ let html='';
+ for(let i=1;i<=8;i++){
+  html+=`
+   <p>
+   <label>
+   <input type="checkbox" ${slides.includes(i)?'checked':''}
+   onchange="toggleSlide(${i},this.checked)">
+   Slide bài học ${i}
+   </label>
+   </p>`;
+ }
+ document.getElementById('slides').innerHTML=html;
+ let percent=slides.length/8*100;
+ document.getElementById('slideProgress').style.width=percent+'%';
+ document.getElementById('slideText').textContent=slides.length+'/8 hoàn thành';
+}
+
+function toggleSlide(i,checked){
+ if(checked) slides.push(i);
+ else slides=slides.filter(x=>x!==i);
+ localStorage.setItem('slides',JSON.stringify(slides));
+ renderSlides();
+}
+
+// QUẢN LÝ GHI CHÚ
+let notes=JSON.parse(localStorage.getItem('notes')||'[]');
+
+if(notes.length===0){
+ notes=[
+  {title:'Ôn tập CNTT 4.0',category:'Học tập',content:'Tìm hiểu xu hướng phát triển công nghệ thông tin.'},
+  {title:'Thư viện số',category:'Học tập',content:'Thu thập 8 slide bài học.'},
+  {title:'Google NotebookLM',category:'Học tập',content:'Tìm hiểu công cụ NotebookLM.'},
+  {title:'Ý tưởng ứng dụng',category:'Ý tưởng',content:'Xây dựng ứng dụng ghi chú cá nhân.'},
+  {title:'Tạo ghi chú',category:'Ý tưởng',content:'Chức năng tạo và lưu ghi chú.'},
+  {title:'Tìm kiếm',category:'Ý tưởng',content:'Tìm kiếm nội dung ghi chú.'},
+  {title:'Theo dõi 5 ngày',category:'Cá nhân',content:'Sử dụng ứng dụng ít nhất 5 ngày.'},
+  {title:'Ứng dụng AI',category:'Ý tưởng',content:'Tìm hiểu AI trong quản lý ghi chú.'},
+  {title:'Chuẩn bị báo cáo',category:'Công việc',content:'Hoàn thành báo cáo Assignment.'},
+  {title:'Chuẩn bị bảo vệ',category:'Học tập',content:'Luyện tập trình bày Assignment.'}
+ ];
+ saveNotes();
+}
+
+function saveNotes(){
+ localStorage.setItem('notes',JSON.stringify(notes));
+}
+
+function addNote(){
+ let title=document.getElementById('title').value.trim();
+ let content=document.getElementById('content').value.trim();
+ let category=document.getElementById('category').value;
+
+ if(!title||!content){
+  alert('Vui lòng nhập tiêu đề và nội dung!');
+  return;
+ }
+
+ notes.push({title,content,category});
+ saveNotes();
+
+ document.getElementById('title').value='';
+ document.getElementById('content').value='';
+
+ renderNotes();
+}
+
+function renderNotes(){
+ let search=document.getElementById('search').value.toLowerCase();
+
+ let filtered=notes.filter(n=>
+  (n.title+' '+n.content).toLowerCase().includes(search)
+ );
+
+ document.getElementById('noteList').innerHTML=filtered.map((n)=>{
+  let index=notes.indexOf(n);
+  return `
+   <div class="note">
+    <span class="tag">${n.category}</span>
+    <h3>${escapeHTML(n.title)}</h3>
+    <p>${escapeHTML(n.content)}</p>
+    <button onclick="editNote(${index})">✎ Sửa</button>
+    <button onclick="deleteNote(${index})">✕ Xóa</button>
+   </div>`;
+ }).join('') || '<p>Không tìm thấy ghi chú.</p>';
+}
+
+function escapeHTML(text){
+ return String(text).replace(/[&<>"']/g,c=>({
+  '&':'&amp;','<':'&lt;','>':'&gt;',
+  '"':'&quot;',"'":'&#39;'
+ }[c]));
+}
+
+function editNote(i){
+ let title=prompt('Sửa tiêu đề:',notes[i].title);
+ if(title===null)return;
+ let content=prompt('Sửa nội dung:',notes[i].content);
+ if(content===null)return;
+
+ notes[i].title=title;
+ notes[i].content=content;
+ saveNotes();
+ renderNotes();
+}
+
+function deleteNote(i){
+ if(confirm('Bạn có chắc chắn muốn xóa?')){
+  notes.splice(i,1);
+  saveNotes();
+  renderNotes();
+ }
+}
+
+// CHECKLIST ASSIGNMENT
+let tasks=[
+ 'Y1 - Thu thập 8 slide bài học',
+ 'Y2 - Thu thập tài liệu PDF hoặc Word',
+ 'Y2 - Thu thập hình ảnh hoặc video',
+ 'Y2 - Lưu website tham khảo',
+ 'Y2 - Viết ghi chú cá nhân',
+ 'Y3 - Tạo thư viện môn học khác',
+ 'Y4 - Phác thảo giao diện chính',
+ 'Y4 - Phác thảo chức năng',
+ 'Y5 - Có ít nhất 10 ghi chú',
+ 'Y5 - Áp dụng ứng dụng ít nhất 5 ngày',
+ 'Y6 - Tìm hiểu tích hợp AI',
+ 'Hoàn thành báo cáo Assignment'
+];
+
+let completed=JSON.parse(localStorage.getItem('tasks')||'[]');
+
+function renderTasks(){
+ let html='';
+ tasks.forEach((task,i)=>{
+  html+=`
+   <p>
+   <label>
+   <input type="checkbox"
+   ${completed.includes(i)?'checked':''}
+   onchange="toggleTask(${i},this.checked)">
+   ${task}
+   </label>
+   </p>`;
+ });
+
+ document.getElementById('taskList').innerHTML=html;
+
+ let percent=completed.length/tasks.length*100;
+ document.getElementById('taskProgress').style.width=percent+'%';
+ document.getElementById('taskText').textContent=
+ completed.length+'/'+tasks.length+' công việc hoàn thành';
+}
+
+function toggleTask(i,checked){
+ if(checked) completed.push(i);
+ else completed=completed.filter(x=>x!==i);
+
+ localStorage.setItem('tasks',JSON.stringify(completed));
+ renderTasks();
+}
+
+// KHỞI TẠO
+renderSlides();
+renderNotes();
+renderTasks();
+
+</script>
+</body>
+</html>
